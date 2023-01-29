@@ -69,8 +69,8 @@ public class Contacts_RecyclerViewAdapter extends RecyclerView.Adapter<Contacts_
 
         contacts.get(position).loadImage(context,holder.imageView);
 
-//        Glide.with(context)
-//                .asBitmap()
+//       Glide.with(context)
+//               .asBitmap()
 //                .load(contacts.get(position).getUrlImage()).into(holder.imageView);
 
 

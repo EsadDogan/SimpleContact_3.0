@@ -1,13 +1,12 @@
 package com.example.project1.home;
 
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -21,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -59,13 +57,11 @@ public class AddContactFragment extends Fragment {
 
 
 
-    private Button btnImage , btnUploadImage ,  btnRegister;
+    private Button btnImage ,  btnRegister;
     private EditText lblName, lblSurname , lblEmail, lblAge;
-    private TextView CorrectChbRequest,correctAgeRequest,CorrectEmailRequest,CorrectSurNameRequest,CorrectNameRequest,txtImageUploaded;
-    private RadioGroup radioGroup;
+    private TextView CorrectChbRequest,correctAgeRequest,CorrectEmailRequest,CorrectSurNameRequest,CorrectNameRequest;
     private Spinner spinner;
     private CheckBox checkBox;
-    private ConstraintLayout parent;
     private RadioButton radioMale , radioFemale , radioOther;
     private ScrollView scrollView;
     private ImageView imageView;
@@ -73,7 +69,6 @@ public class AddContactFragment extends Fragment {
     private Uri mImageUri;
     private ProgressBar progressBar;
     String urlImage;
-    private boolean isImageUploaded = false;
 
     private StorageReference storageReference;
     //private DatabaseReference
@@ -114,7 +109,6 @@ public class AddContactFragment extends Fragment {
         CorrectEmailRequest = view.findViewById(R.id.CorrectEmailRequest);
         CorrectSurNameRequest = view.findViewById(R.id.CorrectSurNameRequest);
         CorrectNameRequest = view.findViewById(R.id.CorrectNameRequest);
-        parent = view.findViewById(R.id.parent);
         checkBox = view.findViewById(R.id.checkboxAgree);
         radioMale = view.findViewById(R.id.radioMale);
         radioFemale = view.findViewById(R.id.radioFemale);
@@ -122,45 +116,40 @@ public class AddContactFragment extends Fragment {
         scrollView = view.findViewById(R.id.screen);
         imageView = view.findViewById(R.id.imageViewAddContact);
         progressBar = view.findViewById(R.id.progressBar);
-        btnUploadImage = view.findViewById(R.id.btnUploadImage);
-        txtImageUploaded = view.findViewById(R.id.txtImageUploaded);
         spinner = view.findViewById(R.id.spinner);
 
 
 
 
-        btnImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              //  Toast.makeText(view.getContext(), "How you dare to change Master Yoda's picture!! Go away!", Toast.LENGTH_SHORT).show();
+        btnImage.setOnClickListener(view1 -> {
+          //  Toast.makeText(view.getContext(), "How you dare to change Master Yoda's picture!! Go away!", Toast.LENGTH_SHORT).show();
 
-                openFileChooser();
-            }
+            openFileChooser();
         });
 
-
-        btnUploadImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (null !=mImageUri){
-                    try {
-                        uploadImage();
-                        Toast.makeText(view.getContext(),"Image uploaded.",Toast.LENGTH_SHORT).show();
-                        txtImageUploaded.setVisibility(View.VISIBLE);
-
-                    }catch (Exception e){
-                        Log.d(TAG, "onClick: error with image" + e.getMessage());
-                        Toast.makeText(view.getContext(),"Something went wrong please try again later.",Toast.LENGTH_SHORT).show();
-                    }
-
-                }else {
-                    Toast.makeText(view.getContext(), "Please choose a image first", Toast.LENGTH_SHORT).show();
-                }
-
-
-            }
-        });
+//// not necessary anymore because upload image has moved to uploadPerson method.
+//        btnUploadImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                if (null !=mImageUri){
+//                    try {
+//                        uploadImage();
+//                        Toast.makeText(view.getContext(),"Image uploaded.",Toast.LENGTH_SHORT).show();
+//                        txtImageUploaded.setVisibility(View.VISIBLE);
+//
+//                    }catch (Exception e){
+//                        Log.d(TAG, "onClick: error with image" + e.getMessage());
+//                        Toast.makeText(view.getContext(),"Something went wrong please try again later.",Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                }else {
+//                    Toast.makeText(view.getContext(), "Please choose a image first", Toast.LENGTH_SHORT).show();
+//                }
+//
+//
+//            }
+//        });
 
 
         labelChangeListeners();
@@ -169,7 +158,7 @@ public class AddContactFragment extends Fragment {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isImageUploaded){
+                if (null!=mImageUri){
 
                     if (correction()) {
 
@@ -189,7 +178,7 @@ public class AddContactFragment extends Fragment {
 
                     }
                 }else {
-                Toast.makeText(view.getContext(), "Please upload image to proceed",Toast.LENGTH_LONG).show();
+                Toast.makeText(view.getContext(), "Please select image to proceed",Toast.LENGTH_LONG).show();
             }
 
 
@@ -357,7 +346,7 @@ public class AddContactFragment extends Fragment {
        homeActivity activity = (homeActivity) getActivity();
 
 
-        String fileName = String.valueOf(activity.contacts.size() + 1 +".jpeg" ) ;
+        String fileName = activity.contacts.size() + 1 +".jpeg"  ;
 
         StorageReference fileReference = storageReference.child(fileName);
 
@@ -374,15 +363,14 @@ public class AddContactFragment extends Fragment {
                     public void run() {
                         progressBar.setProgress(0);
                     }
-                },500);
+                },0);
 
                 Log.d(TAG, "onSuccess: image uploaded "+urlImage);
 
 
                 progressBar.setVisibility(View.GONE);
-                isImageUploaded = true;
-                btnImage.setEnabled(false);
-                btnUploadImage.setEnabled(false);
+
+
 
 
 
@@ -447,10 +435,11 @@ public class AddContactFragment extends Fragment {
             dataToSave.put(KEY_ID, id);
 
             mDocRef = FirebaseFirestore.getInstance().document("contactsDatas/"+id);
-            mDocRef.set(dataToSave).addOnSuccessListener(new OnSuccessListener<Void>() {
+            mDocRef.set(dataToSave).addOnSuccessListener(new OnSuccessListener<>() {
                 @Override
                 public void onSuccess(Void unused) {
                     Log.d(TAG, "onSuccess: everything is great");
+
                     showSnackBar();
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -460,7 +449,7 @@ public class AddContactFragment extends Fragment {
                 }
             });
 
-            ContactsFragment.adapter.notifyDataSetChanged();
+            uploadImage();
 
         }
 

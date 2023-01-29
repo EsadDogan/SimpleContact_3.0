@@ -47,35 +47,15 @@
                         tools:srcCompat="@mipmap/yoda" />
                 </androidx.cardview.widget.CardView>
 
-                <LinearLayout
-                    android:layout_marginStart="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+
                     <Button
                         android:id="@+id/btnPickImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="50dp"
+                        android:layout_marginTop="70dp"
                         android:fontFamily="@font/comfortaa"
                         android:text="Pıck image" />
-                    <Button
-                        android:id="@+id/btnUploadImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="2dp"
-                        android:text="Upload Image"
-                        android:fontFamily="@font/comfortaa"/>
-                    <TextView
-                        android:id="@+id/txtImageUploaded"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Image has added. Please proceed to registration."
-                        android:textSize="12sp"
-                        android:visibility="gone"/>
-                </LinearLayout>
 
 
             </androidx.appcompat.widget.LinearLayoutCompat>

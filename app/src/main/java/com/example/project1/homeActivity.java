@@ -35,6 +35,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.firestore.v1.Document;
 
 
@@ -196,7 +198,9 @@ public class homeActivity extends AppCompatActivity {
 
                 for (DocumentChange dc : value.getDocumentChanges()){
 
+                 //   StorageReference storageReference;
 
+                   // storageReference = FirebaseStorage.getInstance().getReference();
 
                     String firstName = dc.getDocument().getString("firstname");
                     String lastname = dc.getDocument().getString("lastname");
@@ -206,6 +210,7 @@ public class homeActivity extends AppCompatActivity {
                     String urlImage = dc.getDocument().getString("urlImage");
                     String gender = dc.getDocument().getString("gender");
                     String country = dc.getDocument().getString("country");
+                  //  String url = String.valueOf(storageReference.child("uploads/"+String.valueOf(id)+".jpeg").getDownloadUrl())
 
                     ;
 
@@ -214,6 +219,7 @@ public class homeActivity extends AppCompatActivity {
 
 
                 }
+
 
 
                 contactsIsDownloaded = true;
